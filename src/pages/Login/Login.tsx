@@ -2,6 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema, type LoginFormData } from '../../schemas/auth'
+import Input from '../../components/input/Input'
 export default function Login() {
   const {
     register,
@@ -16,7 +17,7 @@ export default function Login() {
   return (
     <div className={`bg-orange`}>
       <div className='max-w-7xl mx-auto px-4'>
-        <div className='grid grid-cols-1  lg:grid-cols-5  lg:pr-12 py-12 lg:py-32'>
+        <div className='grid grid-cols-1  lg:grid-cols-5  lg:pr-12 py-12 lg:py-32 gri'>
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='p-10 rounded bg-white shadow' onSubmit={handleSubmit(onSubmit)}>
               <h2 className='font-bold text-black text-2xl'>Login</h2>
@@ -24,23 +25,38 @@ export default function Login() {
                 <label htmlFor='email' className='text-base mb-2'>
                   Email:
                 </label>
-                <input
-                  type='email'
+                <Input
+                  // type='email'
                   id='email'
-                  {...register('email')}
+                  name='email'
+                  placeholder='Email'
+                  register={register}
                   className='p-2 bg-white w-full rounded text-black outline-none border focus:border-orange  transition-all'
-                ></input>
-                <div className='text-red-500 mt-1 text-sm'>{errors.email?.message}</div>
+                  errorsMessage={errors.email?.message}
+                ></Input>
+                {/* <input type='email' id='email' {...register('email')} className=''></input>
+                <div className='text-red-500 mt-1 text-sm'>{errors.email?.message}</div> */}
               </div>
               <div className='mt-6'>
-                <label className='text-base mb-2' htmlFor='password'>Password:</label>
-                <input
+                <label className='text-base mb-2' htmlFor='password'>
+                  Password:
+                </label>
+                <Input
+                  type='password'
+                  id='password'
+                  name='password'
+                  placeholder='Password'
+                  register={register}
+                  className='p-2 bg-white w-full rounded text-black outline-none border focus:border-orange  transition-all'
+                  errorsMessage={errors.password?.message}
+                ></Input>
+                {/* <input
                   type='password'
                   id='password'
                   {...register('password')}
                   className='p-2 bg-white w-full rounded text-black outline-none border focus:border-orange  transition-all '
                 ></input>
-                <div className='text-red-500 mt-2'>{errors.password?.message}</div>
+                <div className='text-red-500 mt-2'>{errors.password?.message}</div> */}
               </div>
               <button
                 type='submit'
