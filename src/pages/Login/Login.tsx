@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema, type LoginFormData } from '../../schemas/auth'
 import Input from '../../components/input/Input'
+import { useLoginMutation } from '../../hooks/useAuth'
+import toast from 'react-hot-toast'
 export default function Login() {
   const {
     register,
@@ -11,8 +13,20 @@ export default function Login() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema)
   })
-  const onSubmit = (values: LoginFormData) => {
-    console.log('check')
+  const loginMutation = useLoginMutation()
+  console.log('🚀 ~ Login ~ loginMutation:', loginMutation)
+  const onSubmit = async (values: LoginFormData) => {
+    console.log('🚀 ~ onSubmit ~ values:', values)
+    if (loginMutation.isPending) return
+    try {
+      const res = await loginMutation.mutateAsync(values)
+      console.log('🚀 ~ onSubmit ~ res:', res)
+      if (res.data) {
+        toast.success('Login Successfully')
+      }
+    } catch (error) {
+      toast.error('Login Error')
+    }
   }
   return (
     <div className={`bg-orange`}>
