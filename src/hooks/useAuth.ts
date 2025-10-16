@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { authApi } from '../apis/auth'
 
-const useRegisterMutation  = () => {
+const useRegisterMutation = () => {
   return useMutation({
     mutationFn: authApi.register
   })

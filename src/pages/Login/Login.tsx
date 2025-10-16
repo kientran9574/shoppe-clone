@@ -5,10 +5,13 @@ import { loginSchema, type LoginFormData } from '../../schemas/auth'
 import Input from '../../components/input/Input'
 import { useLoginMutation } from '../../hooks/useAuth'
 import toast from 'react-hot-toast'
+import { isAxiosUnprocessableEntityError } from '../../utils/utils'
+import type { ResponseApi } from '../../types/utils.type'
 export default function Login() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting }
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema)
@@ -25,7 +28,30 @@ export default function Login() {
         toast.success('Login Successfully')
       }
     } catch (error) {
-      toast.error('Login Error')
+      // Đây là cách handle bài toán thực tế nếu như có 1 cái FORM có nhiều trường ô input thì mình không thể if nhiều trong code được
+      if (error && isAxiosUnprocessableEntityError<ResponseApi<any>>(error)) {
+        const formError = error.response?.data.data
+        if (formError) {
+          Object.keys(formError).forEach((key) => {
+            setError(key as any, {
+              message: key as any,
+              type: 'Server'
+            })
+          })
+          // if (formError?.email) {
+          //   setError('email', {
+          //     message: formError.email,
+          //     type: 'Server'
+          //   })
+          // }
+          // if (formError?.password) {
+          //   setError('password', {
+          //     message: formError.password,
+          //     type: 'Server'
+          //   })
+          // }
+        }
+      }
     }
   }
   return (
