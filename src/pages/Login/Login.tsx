@@ -34,7 +34,7 @@ export default function Login() {
         if (formError) {
           Object.keys(formError).forEach((key) => {
             setError(key as any, {
-              message: key as any,
+              message: formError[key as keyof typeof formError],
               type: 'Server'
             })
           })
@@ -62,7 +62,7 @@ export default function Login() {
             <form className='p-10 rounded bg-white shadow' onSubmit={handleSubmit(onSubmit)}>
               <h2 className='font-bold text-black text-2xl'>Login</h2>
               <div className='mt-7'>
-                <label htmlFor='email' className='text-base mb-2'>
+                <label htmlFor='email' className={`text-base mb-2  ${errors.email ? 'text-red-500' : 'text-black'}`}>
                   Email:
                 </label>
                 <Input
@@ -78,7 +78,10 @@ export default function Login() {
                 <div className='text-red-500 mt-1 text-sm'>{errors.email?.message}</div> */}
               </div>
               <div className='mt-6'>
-                <label className='text-base mb-2' htmlFor='password'>
+                <label
+                  className={`text-base mb-2  ${errors.password ? 'text-red-500' : 'text-black'}`}
+                  htmlFor='password'
+                >
                   Password:
                 </label>
                 <Input

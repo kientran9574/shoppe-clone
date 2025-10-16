@@ -1,16 +1,47 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema, type RegisterFormData } from '../../schemas/auth'
+import Input from '../../components/input/Input'
+import { useRegisterMutation } from '../../hooks/useAuth'
+import { omit } from 'lodash'
+import toast from 'react-hot-toast'
+import { isAxiosUnprocessableEntityError } from '../../utils/utils'
+import type { ResponseApi } from '../../types/utils.type'
 export default function Login() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting }
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema)
   })
-  const onSubmit = (values: RegisterFormData) => {
-    console.log('check')
+  const registerMutation = useRegisterMutation()
+  const onSubmit = async (values: RegisterFormData) => {
+    if (registerMutation.isPending) return
+    try {
+      const data = omit(values, ['confirm_password'])
+      const res = await registerMutation.mutateAsync(data)
+      if (res.data) {
+        toast.success('Register successfully')
+      }
+    } catch (error) {
+      console.log(error)
+
+      if (error && isAxiosUnprocessableEntityError<ResponseApi<any>>(error)) {
+        console.log(error)
+        const formError = error.response?.data.data
+        console.log('🚀 ~ onSubmit ~ formError:', formError)
+        if (formError) {
+          Object.keys(formError).forEach((key) => {
+            setError(key as any, {
+              message: formError[key as keyof typeof formError],
+              type: 'Server'
+            })
+          })
+        }
+      }
+    }
   }
   return (
     <div className={`bg-orange`}>
@@ -20,40 +51,52 @@ export default function Login() {
             <form className='p-10 rounded bg-white shadow' onSubmit={handleSubmit(onSubmit)}>
               <h2 className='font-bold text-black text-2xl'>Register</h2>
               <div className='mt-7'>
-                <label htmlFor='email' className='text-base mb-2'>
+                <label htmlFor='email' className={`text-base mb-2 ${errors.email ? 'text-red-500' : 'text-black'}`}>
                   Email:
                 </label>
-                <input
-                  type='email'
+                <Input
+                  // type='email'
                   id='email'
-                  {...register('email')}
+                  name='email'
+                  placeholder='Email'
+                  register={register}
                   className='p-2 bg-white w-full rounded text-black outline-none border focus:border-orange  transition-all'
-                ></input>
-                <div className='text-red-500 mt-1 text-sm'>{errors.email?.message}</div>
+                  errorsMessage={errors.email?.message}
+                ></Input>
               </div>
               <div className='mt-6'>
-                <label className='text-base mb-2' htmlFor='password'>
+                <label
+                  className={`text-base mb-2 ${errors.password ? 'text-red-500' : 'text-black'}`}
+                  htmlFor='password'
+                >
                   Password:
                 </label>
-                <input
+                <Input
                   type='password'
                   id='password'
-                  {...register('password')}
-                  className='p-2 bg-white w-full rounded text-black outline-none border focus:border-orange  transition-all '
-                ></input>
-                <div className='text-red-500 mt-2'>{errors.password?.message}</div>
+                  name='password'
+                  placeholder='Password'
+                  register={register}
+                  className='p-2 bg-white w-full rounded text-black outline-none border focus:border-orange  transition-all'
+                  errorsMessage={errors.password?.message}
+                ></Input>
               </div>
               <div className='mt-6'>
-                <label className='text-base mb-2' htmlFor='confirm_password'>
+                <label
+                  className={`text-base mb-2  ${errors.confirm_password ? 'text-red-500' : 'text-black'}`}
+                  htmlFor='confirm_password'
+                >
                   Confirm Password:
                 </label>
-                <input
+                <Input
                   type='password'
                   id='confirm_password'
-                  {...register('confirm_password')}
-                  className='p-2 bg-white w-full rounded text-black outline-none border focus:border-orange  transition-all '
-                ></input>
-                <div className='text-red-500 mt-2'>{errors.confirm_password?.message}</div>
+                  name='confirm_password'
+                  placeholder='Confirm Password'
+                  register={register}
+                  className='p-2 bg-white w-full rounded text-black outline-none border focus:border-orange  transition-all'
+                  errorsMessage={errors.confirm_password?.message}
+                ></Input>
               </div>
               <button
                 type='submit'
