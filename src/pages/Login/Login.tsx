@@ -38,6 +38,14 @@ export default function Login() {
               type: 'Server'
             })
           })
+          //  Đây là cách viết khác
+          // for (const [key, value] of Object.entries(formError)) {
+          //   setError(key as any, {
+          //     message: value as string,
+          //     type: 'Server'
+          //   })
+          // }
+
           // if (formError?.email) {
           //   setError('email', {
           //     message: formError.email,
