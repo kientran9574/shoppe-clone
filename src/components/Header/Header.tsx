@@ -1,33 +1,20 @@
 import { Link } from 'react-router-dom'
-import { useState, useRef } from 'react'
-import { useFloating, FloatingPortal, arrow, shift, offset, autoUpdate } from '@floating-ui/react'
-import { motion, AnimatePresence } from 'motion/react'
+import Popover from '../Popover/Popover'
 export default function Header() {
-  const [open, setOpen] = useState(false)
-  const arrowRef = useRef<HTMLSpanElement>(null)
-  const { x, y, refs, strategy, middlewareData } = useFloating({
-    open,
-    onOpenChange: setOpen,
-    middleware: [offset(6), shift(), arrow({ element: arrowRef })],
-    whileElementsMounted: autoUpdate
-  })
-
-  const showPopover = () => {
-    setOpen(true)
-  }
-  const hidePopover = () => {
-    setOpen(false)
-  }
-
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='flex justify-end'>
-          <div
+          <Popover
+            renderPopover={
+              <div className='bg-white relative shadow-md rounded-sm border border-gray-200 w-[200px]'>
+                <div className='flex flex-col items-start py-2  pl-3'>
+                  <button className='py-2 px-3 hover:text-orange p'>Tiếng Việt</button>
+                  <button className='py-2 px-3 hover:text-orange mt-2'>English</button>
+                </div>
+              </div>
+            }
             className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
-            ref={refs.setReference}
-            onMouseEnter={showPopover}
-            onMouseLeave={hidePopover}
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -54,6 +41,14 @@ export default function Header() {
             >
               <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
             </svg>
+          </Popover>
+          {/* Tách đoạn code này thành component popover  */}
+          {/* <div
+            className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
+            ref={refs.setReference}
+            onMouseEnter={showPopover}
+            onMouseLeave={hidePopover}
+          >
             <FloatingPortal>
               <AnimatePresence>
                 {open && (
@@ -79,19 +74,28 @@ export default function Header() {
                         top: middlewareData.arrow?.y
                       }}
                     />
-                    <div className='bg-white relative shadow-md rounded-sm border border-gray-200 w-[200px]'>
-                      <div className='flex flex-col items-start py-2 px-3'>
-                        <button className='py-2 px-3 hover:text-orange'>Tiếng Việt</button>
-                        <button className='py-2 px-3 hover:text-orange mt-2'>English</button>
-                      </div>
-                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </FloatingPortal>
-          </div>
-
-          <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'>
+          </div> */}
+          <Popover
+            settingProfile={true}
+            renderPopover={
+              <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
+                <div className='flex flex-col items-start py-3'>
+                  <Link to={'/profile'} className=' hover:text-cyan-500 px-4'>
+                    Tài khoản của tôi
+                  </Link>
+                  <Link to={'/purchase'} className='hover:text-cyan-500 my-4 px-4'>
+                    Đơn mua
+                  </Link>
+                  <button className='hover:text-cyan-500 px-4'>Đăng xuất</button>
+                </div>
+              </div>
+            }
+            className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-5'
+          >
             <div className='w-6 h-6 mr-2 flex-shrink-0'>
               <img
                 src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
@@ -100,7 +104,17 @@ export default function Header() {
               />
             </div>
             <div>duthanhduoc</div>
-          </div>
+          </Popover>
+          {/* <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'>
+            <div className='w-6 h-6 mr-2 flex-shrink-0'>
+              <img
+                src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
+                alt='avatar'
+                className='w-full h-full object-cover rounded-full'
+              />
+            </div>
+            <div>duthanhduoc</div>
+          </div> */}
         </div>
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
           <Link to='/' className='col-span-2'>
