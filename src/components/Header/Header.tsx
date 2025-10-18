@@ -6,6 +6,7 @@ export default function Header() {
       <div className='max-w-7xl mx-auto px-4'>
         <div className='flex justify-end'>
           <Popover
+            positionArrorLeft={true}
             renderPopover={
               <div className='bg-white relative shadow-md rounded-sm border border-gray-200 w-[200px]'>
                 <div className='flex flex-col items-start py-2  pl-3'>
@@ -80,7 +81,6 @@ export default function Header() {
             </FloatingPortal>
           </div> */}
           <Popover
-            settingProfile={true}
             renderPopover={
               <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
                 <div className='flex flex-col items-start py-3'>
@@ -150,23 +150,55 @@ export default function Header() {
               </button>
             </div>
           </form>
-          <div className='cols-span-1'>
-            <Link to='/'>
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth={1.5}
-                stroke='currentColor'
-                className='w-8 h-8'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
-                />
-              </svg>
-            </Link>
+          <div className='cols-span-1 mx-auto'>
+            <Popover
+              placement={'bottom-end'}
+              renderPopover={
+                <div className='bg-white relative shadow-md rounded-sm border border-gray-200 w-[450px]'>
+                  <div className='p-2'>
+                    <div className='text-slate-300 uppercase'>NEW Products added</div>
+                    <div className='mt-5'>
+                      <div className='flex gap-4'>
+                        <div className='flex-shrink-0'>
+                          <img src='' className='w-11 h-11 object-cover' alt='' />
+                        </div>
+                        <div className='flex-grow truncate text-sm'>
+                          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit unde nobis quo et quae
+                          reiciendis, laboriosam alias necessitatibus vero! Natus sapiente sed non inventore autem quo
+                          sint exercitationem praesentium nemo!
+                        </div>
+                        <div className='text-orange'>200.000</div>
+                      </div>
+                    </div>
+                    <div className='mt-4'>
+                      <div className='flex items-center justify-between border-t border-t-slate-100 pt-2'>
+                        <div className='capitalize text-xs text-gray-500'>Thêm hàng vào giỏ</div>
+                        <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+                          Xem giỏ hàng
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            >
+              <Link to='/'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className='w-8 h-8'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
+                  />
+                </svg>
+              </Link>
+            </Popover>
           </div>
         </div>
       </div>

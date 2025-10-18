@@ -1,4 +1,4 @@
-import { arrow, autoUpdate, FloatingPortal, offset, shift, useFloating } from '@floating-ui/react'
+import { arrow, autoUpdate, FloatingPortal, offset, shift, useFloating, type Placement } from '@floating-ui/react'
 import { AnimatePresence, motion } from 'motion/react'
 import React, { useId, useRef, useState, type ReactNode } from 'react'
 
@@ -6,9 +6,10 @@ interface IProps {
   children: ReactNode
   renderPopover: ReactNode
   className?: string
-  settingProfile?: boolean
+  positionArrorLeft?: boolean
+  placement?: Placement
 }
-const Popover = ({ children, renderPopover, className, settingProfile }: IProps) => {
+const Popover = ({ children, renderPopover, className, positionArrorLeft,placement }: IProps) => {
   const [open, setOpen] = useState(false)
   const arrowRef = useRef<HTMLSpanElement>(null)
   const id = useId()
@@ -16,6 +17,7 @@ const Popover = ({ children, renderPopover, className, settingProfile }: IProps)
     open,
     onOpenChange: setOpen,
     middleware: [offset(6), shift(), arrow({ element: arrowRef })],
+    placement: placement,
     whileElementsMounted: autoUpdate
   })
   const showPopover = () => {
@@ -49,7 +51,7 @@ const Popover = ({ children, renderPopover, className, settingProfile }: IProps)
                 className='border-x-transparent border-t-transparent border-b-white border-[11px] absolute translate-y-[-95%] z-10'
                 style={{
                   // left: middlewareData.arrow?.x,
-                  left: settingProfile ? middlewareData.arrow?.x : '140px',
+                  left: positionArrorLeft ? '140px' : middlewareData.arrow?.x,
                   top: middlewareData.arrow?.y
                 }}
               />
