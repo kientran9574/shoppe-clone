@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'
 import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import type { ErrorResponse } from '../../types/utils.type'
 import { useAppContext } from '../../context/app.context'
+import Button from '../../components/Button'
 export default function Login() {
   const {
     register,
@@ -17,7 +18,7 @@ export default function Login() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema)
   })
-  const {setAuthenticated} = useAppContext()
+  const { setAuthenticated } = useAppContext()
   const registerMutation = useRegisterMutation()
   const onSubmit = async (values: RegisterFormData) => {
     if (registerMutation.isPending) return
@@ -103,12 +104,14 @@ export default function Login() {
                   errorsMessage={errors.confirm_password?.message}
                 ></Input>
               </div>
-              <button
+              <Button
+                isloading={registerMutation.isPending}
+                disabled={registerMutation.isPending}
                 type='submit'
-                className='w-full py-4 mt-4 rounded border bg-orange font-bold active:bg-opacity-70 transition-all text-white'
+                className='flex items-center justify-center text-white w-full py-4 mt-4 rounded border active:bg-opacity-70 bg-orange font-bold transition-all'
               >
                 Register
-              </button>
+              </Button>
             </form>
           </div>
         </div>

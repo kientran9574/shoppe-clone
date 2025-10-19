@@ -8,6 +8,7 @@ import { getAccessTokenLS, isAxiosUnprocessableEntityError } from '../../utils/u
 import { useAppContext } from '../../context/app.context'
 import type { ErrorResponse } from '../../types/utils.type'
 import { useNavigate } from 'react-router-dom'
+import Button from '../../components/Button'
 
 export default function Login() {
   const {
@@ -112,12 +113,15 @@ export default function Login() {
                 ></input>
                 <div className='text-red-500 mt-2'>{errors.password?.message}</div> */}
               </div>
-              <button
+
+              <Button
+                isloading={loginMutation.isPending}
+                disabled={loginMutation.isPending}
                 type='submit'
-                className='w-full py-4 mt-4 rounded border bg-orange font-bold active:bg-opacity-70 transition-all text-white'
+                className='flex items-center justify-center text-white w-full py-4 mt-4 rounded border active:bg-opacity-70 bg-orange font-bold transition-all'
               >
                 Login
-              </button>
+              </Button>
             </form>
           </div>
         </div>
