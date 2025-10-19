@@ -6,7 +6,8 @@ import { useRegisterMutation } from '../../hooks/useAuth'
 import { omit } from 'lodash'
 import toast from 'react-hot-toast'
 import { isAxiosUnprocessableEntityError } from '../../utils/utils'
-import type { ResponseApi } from '../../types/utils.type'
+import type { ErrorResponse } from '../../types/utils.type'
+import { useAppContext } from '../../context/app.context'
 export default function Login() {
   const {
     register,
@@ -16,6 +17,7 @@ export default function Login() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema)
   })
+  const {setAuthenticated} = useAppContext()
   const registerMutation = useRegisterMutation()
   const onSubmit = async (values: RegisterFormData) => {
     if (registerMutation.isPending) return
@@ -23,12 +25,15 @@ export default function Login() {
       const data = omit(values, ['confirm_password'])
       const res = await registerMutation.mutateAsync(data)
       if (res.data) {
+        if (res.data) {
+          setAuthenticated(true)
+        }
         toast.success('Register successfully')
       }
     } catch (error) {
       console.log(error)
 
-      if (error && isAxiosUnprocessableEntityError<ResponseApi<any>>(error)) {
+      if (error && isAxiosUnprocessableEntityError<ErrorResponse<any>>(error)) {
         console.log(error)
         const formError = error.response?.data.data
         console.log('🚀 ~ onSubmit ~ formError:', formError)

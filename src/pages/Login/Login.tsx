@@ -1,35 +1,38 @@
-import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema, type LoginFormData } from '../../schemas/auth'
 import Input from '../../components/input/Input'
 import { useLoginMutation } from '../../hooks/useAuth'
 import toast from 'react-hot-toast'
-import { isAxiosUnprocessableEntityError } from '../../utils/utils'
-import type { ResponseApi } from '../../types/utils.type'
+import { getAccessTokenLS, isAxiosUnprocessableEntityError } from '../../utils/utils'
+import { useAppContext } from '../../context/app.context'
+import type { ErrorResponse } from '../../types/utils.type'
+import { useNavigate } from 'react-router-dom'
+
 export default function Login() {
   const {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema)
   })
+  const { setAuthenticated } = useAppContext()
   const loginMutation = useLoginMutation()
-  console.log('🚀 ~ Login ~ loginMutation:', loginMutation)
+  const navigate = useNavigate()
   const onSubmit = async (values: LoginFormData) => {
-    console.log('🚀 ~ onSubmit ~ values:', values)
     if (loginMutation.isPending) return
     try {
       const res = await loginMutation.mutateAsync(values)
-      console.log('🚀 ~ onSubmit ~ res:', res)
       if (res.data) {
+        setAuthenticated(true)
         toast.success('Login Successfully')
+        navigate('/')
       }
     } catch (error) {
       // Đây là cách handle bài toán thực tế nếu như có 1 cái FORM có nhiều trường ô input thì mình không thể if nhiều trong code được
-      if (error && isAxiosUnprocessableEntityError<ResponseApi<any>>(error)) {
+      if (error && isAxiosUnprocessableEntityError<ErrorResponse<any>>(error)) {
         const formError = error.response?.data.data
         if (formError) {
           Object.keys(formError).forEach((key) => {

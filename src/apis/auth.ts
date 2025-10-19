@@ -3,5 +3,6 @@ import http from '../utils/http'
 
 export const authApi = {
   login: (body: { email: string; password: string }) => http.post<AuthResponse>('/login', body),
-  register: (body: { email: string; password: string }) => http.post<AuthResponse>('/register', body)
+  register: (body: { email: string; password: string }) => http.post<AuthResponse>('/register', body),
+  logout: () => http.post('/logout')
 }

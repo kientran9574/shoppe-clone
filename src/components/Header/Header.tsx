@@ -1,6 +1,22 @@
 import { Link } from 'react-router-dom'
 import Popover from '../Popover/Popover'
+import { useAppContext } from '../../context/app.context'
+import { useLogoutMutation } from '../../hooks/useAuth'
+import toast from 'react-hot-toast'
 export default function Header() {
+  const { isAuthenticated } = useAppContext()
+  const logoutMutation = useLogoutMutation()
+  const handleLogout = async () => {
+    if (logoutMutation.isPending) return
+    try {
+      const res = await logoutMutation.mutateAsync()
+      if (res.data) {
+        toast.success('Dang xuat thanh cong', { duration: 2000 })
+      }
+    } catch (error) {
+      throw error
+    }
+  }
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='max-w-7xl mx-auto px-4'>
@@ -80,31 +96,46 @@ export default function Header() {
               </AnimatePresence>
             </FloatingPortal>
           </div> */}
-          <Popover
-            renderPopover={
-              <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
-                <div className='flex flex-col items-start py-3'>
-                  <Link to={'/profile'} className=' hover:text-cyan-500 px-4'>
-                    Tài khoản của tôi
-                  </Link>
-                  <Link to={'/purchase'} className='hover:text-cyan-500 my-4 px-4'>
-                    Đơn mua
-                  </Link>
-                  <button className='hover:text-cyan-500 px-4'>Đăng xuất</button>
+          {isAuthenticated ? (
+            <Popover
+              renderPopover={
+                <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
+                  <div className='flex flex-col items-start py-3'>
+                    <Link to={'/profile'} className=' hover:text-cyan-500 px-4'>
+                      Tài khoản của tôi
+                    </Link>
+                    <Link to={'/purchase'} className='hover:text-cyan-500 my-4 px-4'>
+                      Đơn mua
+                    </Link>
+                    <button className='hover:text-cyan-500 px-4' onClick={handleLogout}>
+                      Đăng xuất
+                    </button>
+                  </div>
                 </div>
+              }
+              className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-5'
+            >
+              <div className='w-6 h-6 mr-2 flex-shrink-0'>
+                <img
+                  src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
+                  alt='avatar'
+                  className='w-full h-full object-cover rounded-full'
+                />
               </div>
-            }
-            className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-5'
-          >
-            <div className='w-6 h-6 mr-2 flex-shrink-0'>
-              <img
-                src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
-                alt='avatar'
-                className='w-full h-full object-cover rounded-full'
-              />
+              <div>duthanhduoc</div>
+            </Popover>
+          ) : (
+            <div className='flex items-center justify-center ml-4 gap-2'>
+              <Link to={'/regiser'} className='hover:opacity-80 transition-opacity'>
+                Dang ky
+              </Link>
+              <div>|</div>
+              <Link to={'/login'} className='hover:opacity-80 transition-opacity'>
+                Dang nhap
+              </Link>
             </div>
-            <div>duthanhduoc</div>
-          </Popover>
+          )}
+
           {/* <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'>
             <div className='w-6 h-6 mr-2 flex-shrink-0'>
               <img
@@ -156,11 +187,11 @@ export default function Header() {
               renderPopover={
                 <div className='bg-white relative shadow-md rounded-sm border border-gray-200 w-[450px]'>
                   <div className='p-2'>
-                    <div className='text-slate-300 uppercase'>NEW Products added</div>
+                    <div className='text-slate-400 uppercase'>NEW Products added</div>
                     <div className='mt-5'>
                       <div className='flex gap-4'>
                         <div className='flex-shrink-0'>
-                          <img src='' className='w-11 h-11 object-cover' alt='' />
+                          <img src='' className='w-14 h-14 object-cover' alt='' />
                         </div>
                         <div className='flex-grow truncate text-sm'>
                           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit unde nobis quo et quae

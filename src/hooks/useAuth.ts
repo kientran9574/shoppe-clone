@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { authApi } from '../apis/auth'
-import type { RegisterFormData } from '../schemas/auth'
+import { useAppContext } from '../context/app.context'
 
 const useRegisterMutation = () => {
   return useMutation({
@@ -12,4 +12,11 @@ const useLoginMutation = () => {
     mutationFn: authApi.login
   })
 }
-export { useRegisterMutation, useLoginMutation }
+const useLogoutMutation = () => {
+  const { setAuthenticated } = useAppContext()
+  return useMutation({
+    mutationFn: authApi.logout,
+    onSuccess: () => setAuthenticated(false)
+  })
+}
+export { useRegisterMutation, useLoginMutation, useLogoutMutation }
