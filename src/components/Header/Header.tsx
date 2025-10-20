@@ -4,7 +4,8 @@ import { useAppContext } from '../../context/app.context'
 import { useLogoutMutation } from '../../hooks/useAuth'
 import toast from 'react-hot-toast'
 export default function Header() {
-  const { isAuthenticated } = useAppContext()
+  const { isAuthenticated, profile } = useAppContext()
+  console.log(profile)
   const logoutMutation = useLogoutMutation()
   const handleLogout = async () => {
     if (logoutMutation.isPending) return
@@ -122,7 +123,7 @@ export default function Header() {
                   className='w-full h-full object-cover rounded-full'
                 />
               </div>
-              <div>duthanhduoc</div>
+              <div>{profile?.email}</div>
             </Popover>
           ) : (
             <div className='flex items-center justify-center ml-4 gap-2'>

@@ -9,6 +9,7 @@ import { useAppContext } from '../../context/app.context'
 import type { ErrorResponse } from '../../types/utils.type'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
+import type { User } from '../../types/user.types'
 
 export default function Login() {
   const {
@@ -19,7 +20,7 @@ export default function Login() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema)
   })
-  const { setAuthenticated } = useAppContext()
+  const { setAuthenticated, setProfile } = useAppContext()
   const loginMutation = useLoginMutation()
   const navigate = useNavigate()
   const onSubmit = async (values: LoginFormData) => {
@@ -28,6 +29,7 @@ export default function Login() {
       const res = await loginMutation.mutateAsync(values)
       if (res.data) {
         setAuthenticated(true)
+        setProfile(res.data.data?.user as User)
         toast.success('Login Successfully')
         navigate('/')
       }
