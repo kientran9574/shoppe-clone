@@ -1,6 +1,6 @@
 import React, { type ButtonHTMLAttributes, type ReactNode } from 'react'
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  isloading: boolean
+  isloading?: boolean
 }
 const Button = (props: IButtonProps) => {
   const { children, property, isloading, className, disabled, type, ...rest } = props
