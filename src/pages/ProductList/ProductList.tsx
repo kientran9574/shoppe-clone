@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AsideFilter from './AsideFilter'
 import Product from './Product/Product'
 import SortProductFilter from './SortProductFilter/SortProductFilter'
+import { useProductsQuery } from '../../hooks/useProduct'
 
 const ProductList = () => {
+  const productsQuery = useProductsQuery()
+  const products = productsQuery.data?.data.data?.products
   return (
     <div className='bg-gray-100 py-6'>
       <div className='max-w-7xl mx-auto px-4'>
@@ -14,11 +17,10 @@ const ProductList = () => {
           <div className='col-span-9'>
             <SortProductFilter></SortProductFilter>
             <div className='mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
-              {Array(30)
-                .fill(0)
-                .map((_, index) => (
-                  <div className='mt-6 col-span-1' key={index}>
-                    <Product></Product>
+              {products &&
+                products.map((product) => (
+                  <div className='mt-6 col-span-1' key={product._id}>
+                    <Product product={product}></Product>
                   </div>
                 ))}
             </div>
