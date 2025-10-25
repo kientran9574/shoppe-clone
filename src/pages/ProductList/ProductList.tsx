@@ -13,6 +13,7 @@ export type QueryConfig = {
 }
 const ProductList = () => {
   const queryParams = useQueryParams()
+  const [page, setPage] = useState(1)
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || '1',
@@ -30,8 +31,6 @@ const ProductList = () => {
   const productsQuery = useProductsQuery(queryConfig as IProductListConfig)
   const pagination = productsQuery.data?.data.data?.pagination
   const products = productsQuery.data?.data.data?.products
-  console.log('🚀 ~ ProductList ~ products:', products)
-  const [page, setPage] = useState(1)
   return (
     <div className='bg-gray-100 py-6'>
       <div className='max-w-7xl mx-auto px-4'>
@@ -49,12 +48,7 @@ const ProductList = () => {
                   </div>
                 ))}
             </div>
-            <Pagination
-              page={page}
-              setPage={setPage}
-              pageSize={pagination?.page_size || 20}
-              queryConfig={queryConfig}
-            ></Pagination>
+            <Pagination pageSize={pagination?.page_size || 20} queryConfig={queryConfig}></Pagination>
           </div>
         </div>
       </div>

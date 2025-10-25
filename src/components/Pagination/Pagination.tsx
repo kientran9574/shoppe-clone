@@ -3,12 +3,11 @@ import classNames from 'classnames'
 import { createSearchParams, Link } from 'react-router-dom'
 import type { QueryConfig } from '../../pages/ProductList/ProductList'
 interface IPagigation {
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
   queryConfig: QueryConfig
 }
-const Pagination = ({ page, setPage, pageSize, queryConfig }: IPagigation) => {
+const Pagination = ({ pageSize, queryConfig }: IPagigation) => {
+  const page = Number(queryConfig.page)
   const renderPagination = () => {
     let dotAfter = false
     let dotBefore = false
@@ -66,7 +65,6 @@ const Pagination = ({ page, setPage, pageSize, queryConfig }: IPagigation) => {
               'border-cyan-500': pageNumber === page,
               'border-transparent': pageNumber !== page
             })}
-            onClick={() => setPage(pageNumber)}
           >
             {pageNumber}
           </Link>
@@ -75,31 +73,40 @@ const Pagination = ({ page, setPage, pageSize, queryConfig }: IPagigation) => {
   }
   return (
     <div className='flex flex-wrap mt-6 justify-center'>
-      <Link
-        to={{
-          pathname: '/',
-          search: createSearchParams({
-            ...queryConfig,
-            page: (page - 1).toString()
-          }).toString()
-        }}
-        className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer  border'
-      >
-        Prev
-      </Link>
+      {page === 1 ? (
+        <span className='bg-gray-200 rounded px-3 py-2 shadow-sm mx-2  border cursor-not-allowed '>Prev</span>
+      ) : (
+        <Link
+          to={{
+            pathname: '/',
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page - 1).toString()
+            }).toString()
+          }}
+          className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer  border'
+        >
+          Prev
+        </Link>
+      )}
+
       {renderPagination()}
-      <Link
-        to={{
-          pathname: '/',
-          search: createSearchParams({
-            ...queryConfig,
-            page: (page + 1).toString()
-          }).toString()
-        }}
-        className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer  border'
-      >
-        Next
-      </Link>
+      {page === pageSize ? (
+        <span className='bg-gray-200 rounded px-3 py-2 shadow-sm mx-2 cursor-not-allowed border'>Next</span>
+      ) : (
+        <Link
+          to={{
+            pathname: '/',
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page + 1).toString()
+            }).toString()
+          }}
+          className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer  border'
+        >
+          Next
+        </Link>
+      )}
     </div>
   )
 }
