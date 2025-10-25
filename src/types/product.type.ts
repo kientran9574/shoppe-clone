@@ -22,8 +22,9 @@ export interface IProductList {
   products: IProduct[]
   pagination: {
     page: number
-    litmit: number
+    limit: number
     total: number
+    page_size: number 
   }
 }
 export interface IProductListConfig {

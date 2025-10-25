@@ -1,11 +1,14 @@
-import { useQuery } from '@tanstack/react-query'
-import { useQueryParams } from './useQueryParams'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { productAPI } from '../apis/product'
 import { useParams } from 'react-router-dom'
+import type { IProductListConfig } from '../types/product.type'
 
-export const useProductsQuery = () => {
-  const params = useQueryParams()
-  return useQuery({ queryKey: ['products', params], queryFn: () => productAPI.getProducts(params) })
+export const useProductsQuery = (queryConfig: IProductListConfig) => {
+  return useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => productAPI.getProducts(queryConfig),
+    placeholderData: keepPreviousData
+  })
 }
 export const useProductDetailQuery = () => {
   const { id } = useParams()
