@@ -1,9 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { createSearchParams, Link } from 'react-router-dom'
 import Input from '../../../components/input/Input'
 import Button from '../../../components/Button'
-
-const AsideFilter = () => {
+import type { ICategory } from '../../../types/product.type'
+import classNames from 'classnames'
+import type { QueryConfig } from '../ProductList'
+interface IProps {
+  categories: ICategory[] | undefined
+  queryConfig: QueryConfig
+}
+const AsideFilter = ({ categories, queryConfig }: IProps) => {
+  const { category } = queryConfig
   return (
     <div className=''>
       <Link to={'/'} className='flex items-center font-bold'>
@@ -24,19 +31,45 @@ const AsideFilter = () => {
       </Link>
       <div className='bg-gray-400 h-[1px] w-[90%] my-4' />
       <ul>
-        <li className='py-2 pl-2'>
-          <Link to={'/'} className='relative px-2 text-orange font-semibold'>
-            <svg viewBox='0 0 4 7' className='fill-orange h-2 w-2 absolute top-1 left-[-10px]'>
-              <polygon points='4 3.5 0 0 0 7' />
-            </svg>
-            Thời trang nam
-          </Link>
-        </li>
+        {categories &&
+          categories.map((item) => {
+            const isActive = (item: ICategory) => {
+              return item._id === category
+            }
+            return (
+              <li className='py-2 pl-2' key={item._id}>
+                <Link
+                  to={{
+                    pathname: '/',
+                    search: createSearchParams({
+                      category: item._id
+                    }).toString()
+                  }}
+                  className={classNames('relative px-2 ', {
+                    'text-orange font-semibold': isActive(item),
+                    'py-2 pl-2': !isActive(item)
+                  })}
+                >
+                  <svg
+                    viewBox='0 0 4 7'
+                    className={classNames('h-2 w-2 absolute ', {
+                      'fill-orange top-1 left-[-10px]': isActive(item),
+                      hidden: !isActive(item)
+                    })}
+                  >
+                    <polygon points='4 3.5 0 0 0 7' />
+                  </svg>
+                  {item.name}
+                </Link>
+              </li>
+            )
+          })}
+        {/* 
         <li className='py-2 pl-2'>
           <Link to={'/'} className='relative px-2 '>
             Điện thoại
           </Link>
-        </li>
+        </li> */}
       </ul>
       <div className='bg-gray-400 h-[1px] w-[90%] my-4' />
       <div className='flex flex-col gap-4'>

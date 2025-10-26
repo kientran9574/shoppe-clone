@@ -24,7 +24,7 @@ export interface IProductList {
     page: number
     limit: number
     total: number
-    page_size: number 
+    page_size: number
   }
 }
 export interface IProductListConfig {
@@ -37,4 +37,9 @@ export interface IProductListConfig {
   price_max?: number
   price_min?: number
   name?: string
+  category?: string
+}
+export interface ICategory {
+  _id: string
+  name: string
 }

@@ -18,3 +18,9 @@ export const useProductDetailQuery = () => {
     enabled: Boolean(id)
   })
 }
+export const useCategoryQuery = () => {
+  return useQuery({
+    queryKey: ['categories'],
+    queryFn: () => productAPI.getCategories()
+  })
+}

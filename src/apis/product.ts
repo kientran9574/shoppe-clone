@@ -1,4 +1,4 @@
-import type { IProduct, IProductList, IProductListConfig } from '../types/product.type'
+import type { ICategory, IProduct, IProductList, IProductListConfig } from '../types/product.type'
 import type { SuccessResponse } from '../types/utils.type'
 import http from '../utils/http'
 
@@ -12,5 +12,8 @@ export const productAPI = {
   },
   getProductDetail: (id: string) => {
     return http.get<SuccessResponse<IProduct>>(`${URL}/${id}`)
+  },
+  getCategories: () => {
+    return http.get<SuccessResponse<ICategory[]>>('/categories')
   }
 }
